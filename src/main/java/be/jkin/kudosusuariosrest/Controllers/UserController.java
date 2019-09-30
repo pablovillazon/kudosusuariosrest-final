@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,11 +39,9 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(
-            @PathVariable(value = "id") Long userId) throws ResourceNotFoundException
+            @PathVariable(value = "id") ObjectId userId) throws ResourceNotFoundException
     {
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User not found on ::"+ userId));
-
+        User user = userRepository.findBy_id(userId);
         return ResponseEntity.ok().body(user);
     }
 
@@ -61,11 +60,10 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(
-            @PathVariable(value = "id") Long userId,
+            @PathVariable(value = "id") ObjectId userId,
             @Valid @RequestBody User userDetails) throws ResourceNotFoundException
     {
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User not found on :: "+ userId));
+        User user = userRepository.findBy_id(userId);
 
         user.setNickname(userDetails.getNickname());
         user.setFirstName(userDetails.getFirstName());
@@ -83,10 +81,9 @@ public class UserController {
 
     @DeleteMapping("/users/{id}")
     public Map<String, Boolean> deleteUser(
-            @PathVariable(value = "id") Long userId) throws Exception
+            @PathVariable(value = "id") ObjectId userId) throws Exception
     {
-        User user = userRepository.findById(userId)
-        .orElseThrow(()->new ResourceNotFoundException("User not found on :: " + userId));
+        User user = userRepository.findBy_id(userId);
 
         userRepository.delete(user);
         Map<String, Boolean> response = new HashMap<>();

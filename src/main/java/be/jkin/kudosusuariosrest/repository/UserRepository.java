@@ -1,11 +1,12 @@
 package be.jkin.kudosusuariosrest.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+//import org.springframework.data.mongodb.repository.Query;
 import be.jkin.kudosusuariosrest.model.User;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long>{
+
+public interface UserRepository extends MongoRepository<User, Long>{
+    User findBy_id(ObjectId _id);
     User findByNickname(String nickname);
 }
